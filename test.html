@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار تحميل المكتبات</title>
+</head>
+<body>
+    <h1>اختبار تحميل المكتبات</h1>
+    
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        console.log('جاري التحقق من المكتبات...');
+        
+        setTimeout(() => {
+            console.log('typeof XLSX:', typeof XLSX);
+            
+            if (typeof XLSX !== 'undefined') {
+                console.log('✅ XLSX محملة بنجاح!');
+                console.log('إصدار XLSX:', XLSX.version);
+                document.body.innerHTML += '<p style="color: green; font-size: 24px;">✅ تم تحميل المكتبات بنجاح!</p>';
+            } else {
+                console.error('❌ فشل تحميل XLSX');
+                document.body.innerHTML += '<p style="color: red; font-size: 24px;">❌ فشل تحميل XLSX</p>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

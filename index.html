@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إرسال البريد الإلكتروني</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 نظام إرسال الرسائل البريدية</h1>
+            <p>قم بتحميل ملف Excel وإرسال الرسائل إلى عدة بريد إلكترونات</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>الخطوة 1: قم برفع ملف Excel</h2>
+                <div class="upload-area" id="uploadArea">
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>اسحب ملف Excel هنا أو اضغط للاختيار</p>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+                </div>
+                <div id="fileInfo" class="file-info hidden">
+                    <p id="fileName"></p>
+                    <button id="removeFile" class="btn-secondary">إزالة الملف</button>
+                </div>
+
+                <div id="preview" class="preview-section hidden">
+                    <h2>الخطوة 2: معاينة البيانات</h2>
+                    <div class="table-wrapper">
+                        <table id="previewTable" class="preview-table">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="preview-info">
+                        <p>عدد الصفوف: <strong id="rowCount">0</strong></p>
+                    </div>
+                </div>
+
+                <div id="configSection" class="config-section hidden">
+                    <h2>الخطوة 3: إعدادات البريد</h2>
+                    <div class="form-group">
+                        <label for="senderEmail">بريد المرسل الإلكتروني:</label>
+                        <input type="email" id="senderEmail" placeholder="your-email@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="senderPassword">كلمة المرور (App Password):</label>
+                        <input type="password" id="senderPassword" placeholder="xxxxxx xxxxxx xxxxxx xxxxxx" required>
+                        <small>ملاحظة: استخدم App Password من حسابك في Google</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailColumn">عمود الإيميلات:</label>
+                        <select id="emailColumn" required></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="messageMode">اختر طريقة الرسالة:</label>
+                        <select id="messageMode">
+                            <option value="column">من عمود الملف</option>
+                            <option value="manual">نص يدوي موحد</option>
+                        </select>
+                    </div>
+
+                    <div id="columnMessageGroup" class="form-group">
+                        <label for="messageColumn">عمود الرسالة:</label>
+                        <select id="messageColumn" required></select>
+                    </div>
+
+                    <div id="manualMessageGroup" class="form-group hidden">
+                        <label for="messageEditor">محرر الرسالة:</label>
+                        <textarea id="messageEditor" class="simple-editor" placeholder="اكتب الرسالة هنا..."></textarea>
+                        <small class="editor-hint">اكتب الرسالة النصية البسيطة هنا</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="defaultSubject">موضوع البريد الافتراضي:</label>
+                        <input type="text" id="defaultSubject" placeholder="أدخل موضوع البريد" value="رسالة جديدة">
+                    </div>
+                </div>
+
+                <div id="sendSection" class="send-section hidden">
+                    <h2>الخطوة 4: الإرسال</h2>
+                    <div class="send-controls">
+                        <button id="sendBtn" class="btn-primary">🚀 بدء الإرسال</button>
+                        <button id="resetBtn" class="btn-secondary">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div id="progressSection" class="progress-section hidden">
+                    <h2>حالة الإرسال</h2>
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar"></div>
+                        <span id="progressText" class="progress-text">0%</span>
+                    </div>
+                    <div id="statusList" class="status-list"></div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>📋 تعليمات الاستخدام</h3>
+                <div class="instructions">
+                    <div class="instruction-item">
+                        <h4>1. تنسيق ملف Excel:</h4>
+                        <ul>
+                            <li>العمود الأول: عناوين البريد الإلكتروني</li>
+                            <li>العمود الثاني: موضوع الرسالة (اختياري)</li>
+                            <li>العمود الثالث: محتوى الرسالة</li>
+                            <li>يمكن استخدام HTML في الرسائل</li>
+                        </ul>
+                    </div>
+                    <div class="instruction-item">
+                        <h4>2. إعداد حساب Gmail:</h4>
+                        <ul>
+                            <li>قم بتفعيل المصادقة الثنائية على حسابك</li>
+                            <li>انتقل إلى <a href="https://myaccount.google.com/apppasswords" target="_blank">App Passwords</a></li>
+                            <li>اختر تطبيق مخصص وأنسخ كلمة المرور</li>
+                        </ul>
+                    </div>
+                    <div class="instruction-item">
+                        <h4>3. الأمان:</h4>
+                        <ul>
+                            <li>البيانات تُرسل مباشرة من متصفحك</li>
+                            <li>لا تُحفظ على خوادم خارجية</li>
+                            <li>استخدم فقط في بيئة آمنة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✅ تم الإرسال بنجاح!</h3>
+            </div>
+            <div class="modal-body">
+                <p>تم إرسال <strong id="successCount">0</strong> رسالة بنجاح</p>
+                <p id="failureMessage" class="text-warning hidden">فشل إرسال <strong id="failureCount">0</strong> رسالة</p>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalBtn" class="btn-primary">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        // إذا فشل تحميل من unpkg، حاول من الخادم المحلي
+        if (typeof XLSX === 'undefined') {
+            document.write('<script src="/xlsx.min.js"><\/script>');
+        }
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
