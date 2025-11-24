@@ -322,7 +322,7 @@ async function sendEmailViaGmail(to, subject, message, fromEmail, appPassword) {
 // إرسال البريد عبر خادم backend
 async function sendViaBackend(to, subject, message, fromEmail, appPassword) {
     try {
-        const response = await fetch('https://server.digithubemails.yllabena.com/send-email', {
+        const response = await fetch('https://digithub-api.vercel.app/send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
